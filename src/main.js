@@ -1,4 +1,4 @@
-`use strict`;
+'use strict';
 
 const TASKS_NUM = 3;
 
@@ -313,7 +313,7 @@ const createSiteAddTaskTemplate = () => {
     </article>`
   );
 };
-
+/* Пока не используется
 const createSiteEditTaskTemplate = () => {
   return (
     `<article class="card card--edit card--yellow card--repeat">
@@ -515,7 +515,7 @@ const createSiteEditTaskTemplate = () => {
     </article>`
   );
 };
-
+*/
 const createSiteTaskTemplate = () => {
   return (
     `<article class="card card--black">
