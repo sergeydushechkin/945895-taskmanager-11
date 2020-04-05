@@ -569,3 +569,25 @@ const createLearnMoreButtonTemplate = () => {
     `<button class="load-more" type="button">load more</button>`
   );
 };
+
+const renderElement = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+const mainContainer = document.querySelector('.main');
+const mainControlContainer = mainContainer.querySelector('.main__control');
+
+renderElement(mainControlContainer, createSiteMenuTemplate(), 'beforeend');
+renderElement(mainContainer, createSiteFilterTemplate(), 'beforeend');
+renderElement(mainContainer, createSiteBoardTemplate(), 'beforeend');
+
+const boardContainer = mainContainer.querySelector('.board');
+const boardTasksContainer = boardContainer.querySelector('.board__tasks');
+
+renderElement(boardTasksContainer, createSiteAddTaskTemplate(), 'beforeend');
+
+for (let i = 0; i < TASKS_NUM; i++) {
+  renderElement(boardTasksContainer, createSiteTaskTemplate(), 'beforeend');
+}
+
+renderElement(boardContainer, createLearnMoreButtonTemplate(), 'beforeend');
