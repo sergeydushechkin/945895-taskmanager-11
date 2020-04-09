@@ -8,6 +8,8 @@ import {createTaskEditTemplate} from "./components/task-edit.js";
 import {createSiteTaskTemplate} from "./components/task.js";
 import {createLearnMoreButtonTemplate} from "./components/learn-more-button.js";
 
+import {generateFilters} from "./mock/filter.js";
+
 const renderElement = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -15,8 +17,10 @@ const renderElement = (container, template, place) => {
 const mainContainer = document.querySelector(`.main`);
 const mainControlContainer = mainContainer.querySelector(`.main__control`);
 
+const filters = generateFilters();
+
 renderElement(mainControlContainer, createSiteMenuTemplate(), `beforeend`);
-renderElement(mainContainer, createSiteFilterTemplate(), `beforeend`);
+renderElement(mainContainer, createSiteFilterTemplate(filters), `beforeend`);
 renderElement(mainContainer, createSiteBoardTemplate(), `beforeend`);
 
 const boardContainer = mainContainer.querySelector(`.board`);
