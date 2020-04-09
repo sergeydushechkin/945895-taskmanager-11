@@ -9,6 +9,7 @@ import {createSiteTaskTemplate} from "./components/task.js";
 import {createLearnMoreButtonTemplate} from "./components/learn-more-button.js";
 
 import {generateFilters} from "./mock/filter.js";
+import {generateTasks} from "./mock/task.js";
 
 const renderElement = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -18,6 +19,7 @@ const mainContainer = document.querySelector(`.main`);
 const mainControlContainer = mainContainer.querySelector(`.main__control`);
 
 const filters = generateFilters();
+const tasks = generateTasks(TASKS_NUM);
 
 renderElement(mainControlContainer, createSiteMenuTemplate(), `beforeend`);
 renderElement(mainContainer, createSiteFilterTemplate(filters), `beforeend`);
@@ -27,10 +29,10 @@ const boardContainer = mainContainer.querySelector(`.board`);
 const boardTasksContainer = boardContainer.querySelector(`.board__tasks`);
 
 renderElement(boardContainer, createSortTemplate(), `afterbegin`);
-renderElement(boardTasksContainer, createTaskEditTemplate(), `beforeend`);
+renderElement(boardTasksContainer, createTaskEditTemplate(tasks[0]), `beforeend`);
 
 for (let i = 0; i < TASKS_NUM; i++) {
-  renderElement(boardTasksContainer, createSiteTaskTemplate(), `beforeend`);
+  renderElement(boardTasksContainer, createSiteTaskTemplate(tasks[i]), `beforeend`);
 }
 
 renderElement(boardContainer, createLearnMoreButtonTemplate(), `beforeend`);
