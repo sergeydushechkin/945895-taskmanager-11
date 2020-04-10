@@ -1,10 +1,18 @@
-export const createSiteTaskTemplate = (task) => {
-  const {description, date, time, color, isArchive, isFavorite} = task;
+import {MONTH_NAMES} from "../const.js";
+import {formatTime} from "../utils.js";
 
+export const createSiteTaskTemplate = (task) => {
+  const {description, dueDate, repeatingDays, color, isArchive, isFavorite} = task;
+
+  const isExpired = dueDate instanceof Date && dueDate < Date.now();
+  const isDateShowing = !!dueDate;
+
+  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+  const time = isDateShowing ? formatTime(dueDate) : ``;
   const archiveButtonInactiveClass = isArchive ? `` : `card__btn--disabled`;
   const favoriteButtonInactiveClass = isFavorite ? `` : `card__btn--disabled`;
-  const repeatClass = `card--repeat`;
-  const deadlineClass = `card--deadline`;
+  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
+  const deadlineClass = isExpired ? `card--deadline` : ``;
 
 
   return (
