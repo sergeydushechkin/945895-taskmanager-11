@@ -5,7 +5,7 @@ import {createSiteMenuTemplate} from "./components/menu.js";
 import {createSiteTaskTemplate} from "./components/task.js";
 import {createSortTemplate} from "./components/sort.js";
 import {createTaskEditTemplate} from "./components/task-edit.js";
-import {generateFilters} from "./mock/filter.js";
+import {/* generateFilters, */getFilters} from "./mock/filter.js";
 import {generateTasks} from "./mock/task.js";
 
 const TASKS_NUM = 22;
@@ -19,8 +19,10 @@ const renderElement = (container, template, place) => {
 const mainContainer = document.querySelector(`.main`);
 const mainControlContainer = mainContainer.querySelector(`.main__control`);
 
-const filters = generateFilters();
 const tasks = generateTasks(TASKS_NUM);
+const filters = getFilters(tasks);
+// const filters = generateFilters(tasks);
+
 
 renderElement(mainControlContainer, createSiteMenuTemplate(), `beforeend`);
 renderElement(mainContainer, createSiteFilterTemplate(filters), `beforeend`);
