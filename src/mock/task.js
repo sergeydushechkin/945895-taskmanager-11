@@ -21,13 +21,21 @@ const getRandomDate = () => {
   return targetDate;
 };
 
+const generateRepeatingDays = () => {
+  let repeatingDays = {};
+  for (const day of Object.keys(DefaultRepeatingDays)) {
+    repeatingDays[day] = Math.random() > 0.5;
+  }
+  return repeatingDays;
+};
+
 export const generateTask = () => {
   const dueDate = Math.random() > 0.5 ? null : getRandomDate();
 
   return {
     description: DESCRIPTIONS[getRandomIntegerNumber(0, 2)],
     dueDate,
-    repeatingDays: Object.assign({}, DefaultRepeatingDays, {"mo": Math.random() > 0.5}),
+    repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
     color: COLORS[getRandomIntegerNumber(0, COLORS.length - 1)],
     isArchive: Math.random() > 0.5,
     isFavorite: Math.random() > 0.5
