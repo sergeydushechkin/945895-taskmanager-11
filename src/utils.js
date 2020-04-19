@@ -12,3 +12,10 @@ export const formatTime = (date) => {
 
   return `${hours}:${minutes}`;
 };
+
+export const createElement = (template) => {
+  const tempElement = document.createElement(`div`);
+  tempElement.innerHTML = template;
+
+  return tempElement.firstChild;
+};
