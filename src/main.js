@@ -42,9 +42,10 @@ const renderTask = (taskListElement, task) => {
 
   const taskEditComponent = new TaskEditComponent(task);
   const editForm = taskEditComponent.getElement().querySelector(`form`);
-  editForm.addEventListener(`submit`, () => {
+  editForm.addEventListener(`submit`, (evt) => {
     replaceEditToTask();
     document.removeEventListener(`keydown`, onEscKeyKeydown);
+    evt.preventDefault();
   });
 
   render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
