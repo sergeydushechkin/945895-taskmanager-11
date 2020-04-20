@@ -1,5 +1,5 @@
 import {MONTH_NAMES, DAYS, COLORS} from "../const.js";
-import {formatTime} from "../utils.js";
+import {formatTime, createElement} from "../utils.js";
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors.map((color, index) => {
@@ -40,12 +40,13 @@ const createRepeatingDaysMarkup = (days, repeatingDays) => {
   .join(`\n`);
 };
 
-export const createTaskEditTemplate = (task) => {
+const createTaskEditTemplate = (task) => {
   const {description, dueDate, repeatingDays, color} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;
 
+  const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
   const repeatClass = `card--repeat`;
   const deadlineClass = isExpired ? `card--deadline` : ``;
   const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
@@ -80,9 +81,7 @@ export const createTaskEditTemplate = (task) => {
                 <button class="card__date-deadline-toggle" type="button">
                   date: <span class="card__date-status">yes</span>
                 </button>
-                ${
-    isDateShowing ?
-      `<fieldset class="card__date-deadline">
+                ${isDateShowing ? `<fieldset class="card__date-deadline">
                   <label class="card__input-deadline-wrap">
                     <input
                       class="card__date"
@@ -92,18 +91,16 @@ export const createTaskEditTemplate = (task) => {
                       value="${date} ${time}"
                     />
                   </label>
-                </fieldset>`
-      : ``
-    }
+                </fieldset>` : ``}
                 <button class="card__repeat-toggle" type="button">
                   repeat:<span class="card__repeat-status">yes</span>
                 </button>
 
-                <fieldset class="card__repeat-days">
+                ${isRepeatingTask ? `<fieldset class="card__repeat-days">
                   <div class="card__repeat-days-inner">
                     ${repeatingDaysMarkup}
                   </div>
-                </fieldset>
+                </fieldset>` : ``}
               </div>
             </div>
 
@@ -124,3 +121,27 @@ export const createTaskEditTemplate = (task) => {
     </article>`
   );
 };
+
+
+export default class Board {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTaskEditTemplate(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate);
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

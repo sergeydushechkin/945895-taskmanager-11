@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createFilterMarkup = (filter, isChecked) => {
   const {name, count} = filter;
   return `<input
@@ -12,7 +14,7 @@ const createFilterMarkup = (filter, isChecked) => {
   >`;
 };
 
-export const createSiteFilterTemplate = (filters) => {
+const createSiteFilterTemplate = (filters) => {
   const filtersMarkup = filters.map((filter, index) =>
     createFilterMarkup(filter, index === 0)).join(`\n`);
   return (
@@ -21,3 +23,26 @@ export const createSiteFilterTemplate = (filters) => {
     </section>`
   );
 };
+
+export default class Filter {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteFilterTemplate(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate);
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
