@@ -1,6 +1,6 @@
 import {createElement} from "../utils.js";
 
-const createLearnMoreButtonTemplate = () => {
+const createLoadMoreButtonTemplate = () => {
   return (
     `<button class="load-more" type="button">load more</button>`
   );
@@ -13,7 +13,7 @@ export default class Filter {
   }
 
   getTemplate() {
-    return createLearnMoreButtonTemplate(this._task);
+    return createLoadMoreButtonTemplate(this._task);
   }
 
   getElement() {
