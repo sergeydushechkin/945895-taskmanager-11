@@ -14,7 +14,7 @@ const createFilterMarkup = (filter, isChecked) => {
   >`;
 };
 
-const createSiteFilterTemplate = (filters) => {
+const createFilterTemplate = (filters) => {
   const filtersMarkup = filters.map((filter, index) =>
     createFilterMarkup(filter, index === 0)).join(`\n`);
   return (
@@ -31,7 +31,7 @@ export default class Filter {
   }
 
   getTemplate() {
-    return createSiteFilterTemplate(this._task);
+    return createFilterTemplate(this._task);
   }
 
   getElement() {

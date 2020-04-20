@@ -1,11 +1,8 @@
 import {createElement} from "../utils.js";
 
-const createSiteBoardTemplate = () => {
+const createBoardTemplate = () => {
   return (
-    `<section class="board container">
-
-      <div class="board__tasks"></div>
-    </section>`
+    `<section class="board container"></section>`
   );
 };
 
@@ -16,7 +13,7 @@ export default class Board {
   }
 
   getTemplate() {
-    return createSiteBoardTemplate(this._task);
+    return createBoardTemplate(this._task);
   }
 
   getElement() {

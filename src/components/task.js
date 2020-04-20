@@ -1,7 +1,7 @@
 import {MONTH_NAMES} from "../const.js";
 import {formatTime, createElement} from "../utils.js";
 
-const createSiteTaskTemplate = (task) => {
+const createTaskTemplate = (task) => {
   const {description, dueDate, repeatingDays, color, isArchive, isFavorite} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
@@ -69,7 +69,7 @@ export default class Task {
   }
 
   getTemplate() {
-    return createSiteTaskTemplate(this._task);
+    return createTaskTemplate(this._task);
   }
 
   getElement() {
