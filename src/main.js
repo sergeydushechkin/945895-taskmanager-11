@@ -1,56 +1,103 @@
-import {createLearnMoreButtonTemplate} from "./components/learn-more-button.js";
-import {createSiteBoardTemplate} from "./components/board.js";
-import {createSiteFilterTemplate} from "./components/filter.js";
-import {createSiteMenuTemplate} from "./components/menu.js";
-import {createSiteTaskTemplate} from "./components/task.js";
-import {createSortTemplate} from "./components/sort.js";
-import {createTaskEditTemplate} from "./components/task-edit.js";
-import {/* generateFilters, */getFilters} from "./mock/filter.js";
+import LoadMoreButtonComponent from "./components/load-more-button.js";
+import BoardComponent from "./components/board.js";
+import FilterComponent from "./components/filter.js";
+import SiteMenuComponent from "./components/menu.js";
+import TaskComponent from "./components/task.js";
+import TasksComponent from "./components/tasks.js";
+import SortComponent from "./components/sort.js";
+import TaskEditComponent from "./components/task-edit.js";
+import NoTasksComponent from "./components/no-tasks.js";
+import {getFilters} from "./mock/filter.js";
 import {generateTasks} from "./mock/task.js";
+import {render, RenderPosition} from "./utils.js";
 
 const TASKS_NUM = 22;
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
-const renderElement = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
+const renderTask = (taskListElement, task) => {
+  const replaceTaskToEdit = () => {
+    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+  };
+
+  const replaceEditToTask = () => {
+    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+  };
+
+  const onEscKeyKeydown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      replaceEditToTask();
+      document.removeEventListener(`keydown`, onEscKeyKeydown);
+    }
+  };
+
+  const taskComponent = new TaskComponent(task);
+  const editButton = taskComponent.getElement().querySelector(`.card__btn--edit`);
+  editButton.addEventListener(`click`, () => {
+    replaceTaskToEdit();
+    document.addEventListener(`keydown`, onEscKeyKeydown);
+  });
+
+  const taskEditComponent = new TaskEditComponent(task);
+  const editForm = taskEditComponent.getElement().querySelector(`form`);
+  editForm.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    replaceEditToTask();
+    document.removeEventListener(`keydown`, onEscKeyKeydown);
+  });
+
+  render(taskListElement, taskComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-const mainContainer = document.querySelector(`.main`);
-const mainControlContainer = mainContainer.querySelector(`.main__control`);
+const renderBoard = (boardComponent, tasks) => {
+  const isAllTasksArchived = tasks.every((task) => task.isArchive);
+
+  if (isAllTasksArchived) {
+    render(boardComponent.getElement(), new NoTasksComponent().getElement(), RenderPosition.BEFOREEND);
+    return;
+  }
+
+  render(boardComponent.getElement(), new SortComponent().getElement(), RenderPosition.BEFOREEND);
+  render(boardComponent.getElement(), new TasksComponent().getElement(), RenderPosition.BEFOREEND);
+
+  const taskListElement = boardComponent.getElement().querySelector(`.board__tasks`);
+
+  let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
+  tasks.slice(1)
+    .forEach((task) => {
+      renderTask(taskListElement, task);
+    });
+
+  const loadMoreButtonComponent = new LoadMoreButtonComponent();
+  render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+
+  loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
+    const prevTaskCount = showingTasksCount;
+    showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
+
+    tasks.slice(prevTaskCount, showingTasksCount)
+      .forEach((task) => {
+        renderTask(taskListElement, task);
+      });
+
+    if (showingTasksCount >= tasks.length) {
+      loadMoreButtonComponent.getElement().remove();
+      loadMoreButtonComponent.removeElement();
+    }
+  });
+};
+
+const siteMainElement = document.querySelector(`.main`);
+const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
 const tasks = generateTasks(TASKS_NUM);
 const filters = getFilters(tasks);
-// const filters = generateFilters(tasks);
 
+render(siteHeaderElement, new SiteMenuComponent().getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, new FilterComponent(filters).getElement(), RenderPosition.BEFOREEND);
 
-renderElement(mainControlContainer, createSiteMenuTemplate(), `beforeend`);
-renderElement(mainContainer, createSiteFilterTemplate(filters), `beforeend`);
-renderElement(mainContainer, createSiteBoardTemplate(), `beforeend`);
-
-const boardContainer = mainContainer.querySelector(`.board`);
-const boardTasksContainer = boardContainer.querySelector(`.board__tasks`);
-
-renderElement(boardContainer, createSortTemplate(), `afterbegin`);
-renderElement(boardTasksContainer, createTaskEditTemplate(tasks[0]), `beforeend`);
-
-let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
-
-tasks.slice(1, showingTasksCount).forEach((task) =>
-  renderElement(boardTasksContainer, createSiteTaskTemplate(task), `beforeend`));
-
-renderElement(boardContainer, createLearnMoreButtonTemplate(), `beforeend`);
-
-const loadMoreButton = boardContainer.querySelector(`.load-more`);
-loadMoreButton.addEventListener(`click`, () =>{
-  const prevTaskCount = showingTasksCount;
-  showingTasksCount = showingTasksCount + SHOWING_TASKS_COUNT_BY_BUTTON;
-
-  tasks.slice(prevTaskCount, showingTasksCount).forEach((task) => {
-    renderElement(boardTasksContainer, createSiteTaskTemplate(task), `beforeend`);
-  });
-
-  if (showingTasksCount >= tasks.length) {
-    loadMoreButton.remove();
-  }
-});
+const boardComponent = new BoardComponent();
+render(siteMainElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
+renderBoard(boardComponent, tasks);

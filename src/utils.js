@@ -1,3 +1,8 @@
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
 export const getRandomIntegerNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -11,4 +16,22 @@ export const formatTime = (date) => {
   const minutes = castTimeFormat(date.getMinutes());
 
   return `${hours}:${minutes}`;
+};
+
+export const createElement = (template) => {
+  const tempElement = document.createElement(`div`);
+  tempElement.innerHTML = template;
+
+  return tempElement.firstChild;
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
 };
