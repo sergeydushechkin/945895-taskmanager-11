@@ -7,13 +7,12 @@ const createBoardTemplate = () => {
 };
 
 export default class Board {
-  constructor(task) {
-    this._task = task;
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createBoardTemplate(this._task);
+    return createBoardTemplate();
   }
 
   getElement() {

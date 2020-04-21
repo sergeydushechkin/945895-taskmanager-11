@@ -25,13 +25,13 @@ const createFilterTemplate = (filters) => {
 };
 
 export default class Filter {
-  constructor(task) {
-    this._task = task;
+  constructor(filters) {
+    this._filters = filters;
     this._element = null;
   }
 
   getTemplate() {
-    return createFilterTemplate(this._task);
+    return createFilterTemplate(this._filters);
   }
 
   getElement() {
