@@ -33,14 +33,13 @@ const createSiteMenuTemplate = () => {
   );
 };
 
-export default class Board {
-  constructor(task) {
-    this._task = task;
+export default class SiteMenu {
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createSiteMenuTemplate(this._task);
+    return createSiteMenuTemplate();
   }
 
   getElement() {

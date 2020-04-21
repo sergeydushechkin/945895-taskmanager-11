@@ -6,14 +6,13 @@ const createLoadMoreButtonTemplate = () => {
   );
 };
 
-export default class Filter {
-  constructor(task) {
-    this._task = task;
+export default class LoadMoreButton {
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createLoadMoreButtonTemplate(this._task);
+    return createLoadMoreButtonTemplate();
   }
 
   getElement() {

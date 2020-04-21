@@ -10,14 +10,13 @@ const createSortTemplate = () => {
   );
 };
 
-export default class Board {
-  constructor(task) {
-    this._task = task;
+export default class Sort {
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createSortTemplate(this._task);
+    return createSortTemplate();
   }
 
   getElement() {
