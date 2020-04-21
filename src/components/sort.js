@@ -10,7 +10,7 @@ const createSortTemplate = () => {
   );
 };
 
-export default class Board {
+export default class Sort {
   constructor(task) {
     this._task = task;
     this._element = null;

@@ -6,7 +6,7 @@ const createLoadMoreButtonTemplate = () => {
   );
 };
 
-export default class Filter {
+export default class LoadMoreButton {
   constructor(task) {
     this._task = task;
     this._element = null;
