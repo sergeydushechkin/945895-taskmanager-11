@@ -15,20 +15,18 @@ export default class TaskController {
     this._taskComponent = new TaskComponent(task);
     this._taskEditComponent = new TaskEditComponent(task);
 
-    const taskComponent = new TaskComponent(task);
-    taskComponent.setEditButtonClickHandler(() => {
-      replaceTaskToEdit();
-      document.addEventListener(`keydown`, onEscKeyKeydown);
+    this._taskComponent.setEditButtonClickHandler(() => {
+      this._replaceTaskToEdit();
+      document.addEventListener(`keydown`, this._onEscKeyKeydown);
     });
 
-    const taskEditComponent = new TaskEditComponent(task);
-    taskEditComponent.setSubmitHandler((evt) => {
+    this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      replaceEditToTask();
-      document.removeEventListener(`keydown`, onEscKeyKeydown);
+      this._replaceEditToTask();
+      document.removeEventListener(`keydown`, this._onEscKeyKeydown);
     });
 
-    render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
+    render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
   }
 
   _replaceTaskToEdit() {
@@ -40,7 +38,7 @@ export default class TaskController {
     replace(this._taskComponent, this._taskEditComponent);
   }
 
-  _onEscKeyKeydown(evt) {
+  _onEscKeyDown(evt) {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
