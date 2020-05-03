@@ -21,7 +21,7 @@ export default class TaskController {
 
   render(task) {
     const oldTaskComponent = this._taskComponent;
-    const oldTaskEditComponent = this._taskComponent;
+    const oldTaskEditComponent = this._taskEditComponent;
 
     this._taskComponent = new TaskComponent(task);
     this._taskEditComponent = new TaskEditComponent(task);
@@ -46,11 +46,10 @@ export default class TaskController {
     this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
       this._replaceEditToTask();
-      document.removeEventListener(`keydown`, this._onEscKeyKeydown);
     });
 
     if (oldTaskEditComponent && oldTaskComponent) {
-      replace(this._taskComponent, oldTaskEditComponent);
+      replace(this._taskComponent, oldTaskComponent);
       replace(this._taskEditComponent, oldTaskEditComponent);
     } else {
       render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
@@ -59,21 +58,21 @@ export default class TaskController {
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._replaceTaskToEdit();
+      this._replaceEditToTask();
     }
   }
 
   _replaceTaskToEdit() {
     this._onViewChange();
     replace(this._taskEditComponent, this._taskComponent);
-    this._mode = Mode.DEFAULT;
+    this._mode = Mode.EDIT;
   }
 
   _replaceEditToTask() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._taskEditComponent.reset();
     replace(this._taskComponent, this._taskEditComponent);
-    this._mode = Mode.EDIT;
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {
