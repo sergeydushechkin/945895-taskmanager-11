@@ -33,6 +33,7 @@ export const generateTask = () => {
   const dueDate = Math.random() > 0.5 ? null : getRandomDate();
 
   return {
+    id: String(new Date() + Math.random()),
     description: DESCRIPTIONS[getRandomIntegerNumber(0, 2)],
     dueDate,
     repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
