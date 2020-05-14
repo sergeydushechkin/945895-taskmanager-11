@@ -1,5 +1,6 @@
 import {formatTime, formatDate, isOverdueDate} from "../utils/common.js";
 import AbstractComponent from "./abstract-component.js";
+import {encode} from "he";
 
 const createButtonMarkup = (name, isActive = true) => {
   return (
@@ -10,13 +11,14 @@ const createButtonMarkup = (name, isActive = true) => {
 };
 
 const createTaskTemplate = (task) => {
-  const {description, dueDate, repeatingDays, color} = task;
+  const {description: notSanitizedDescription, dueDate, repeatingDays, color} = task;
 
   const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
   const isDateShowing = !!dueDate;
 
   const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
+  const description = encode(notSanitizedDescription);
 
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
