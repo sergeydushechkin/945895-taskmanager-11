@@ -33,7 +33,7 @@ export default class TaskController {
 
     this._taskComponent.setArchiveButtonClickHandler(() => {
       this._onDataChange(this, task, Object.assign({}, task, {
-        isAchive: !task.isAchive,
+        isArchive: !task.isArchive,
       }));
     });
 

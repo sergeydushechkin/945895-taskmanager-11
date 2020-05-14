@@ -1,5 +1,15 @@
+export const COLOR = {
+  BLACK: `black`,
+  YELLOW: `yellow`,
+  BLUE: `blue`,
+  GREEN: `green`,
+  PINK: `pink`
+};
+
+export const COLORS = Object.values(COLOR);
+
 export const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
-export const COLORS = [`black`, `yellow`, `blue`, `green`, `pink`];
+
 export const MONTH_NAMES = [
   `January`,
   `February`,
