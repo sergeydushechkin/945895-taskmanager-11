@@ -35,7 +35,7 @@ const parseFormData = (formData) => {
 
   return new TaskModel({
     "description": formData.get(`text`),
-    "dueDate": date ? new Date(date) : null,
+    "due_date": date ? new Date(date) : null,
     "repeating_days": formData.getAll(`repeat`).reduce((acc, it) => {
       acc[it] = true;
       return acc;
