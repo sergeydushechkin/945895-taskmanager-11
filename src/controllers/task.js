@@ -89,6 +89,7 @@ export default class TaskController {
 
     this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
+      this._taskEditComponent.setRedBorder(false);
 
       const formData = this._taskEditComponent.getData();
       const data = parseFormData(formData);
@@ -100,6 +101,8 @@ export default class TaskController {
       this._onDataChange(this, task, data);
     });
     this._taskEditComponent.setDeleteButtonClickHandler(() => {
+      this._taskEditComponent.setRedBorder(false);
+
       this._taskEditComponent.setData({
         deleteButtonText: `Deleting...`,
       });
@@ -152,6 +155,8 @@ export default class TaskController {
         saveButtonText: `Save`,
         deleteButtonText: `Delete`,
       });
+
+      this._taskEditComponent.setRedBorder(true);
     }, SHAKE_ANIMATION_TIMEOUT);
   }
 

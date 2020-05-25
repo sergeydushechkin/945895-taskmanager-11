@@ -219,6 +219,14 @@ export default class TaskEdit extends AbstractSmartComponent {
     this.rerender();
   }
 
+  setRedBorder(state) {
+    if (state) {
+      this.getElement().querySelector(`.card__inner`).classList.add(`red-border`);
+    } else {
+      this.getElement().querySelector(`.card__inner`).classList.remove(`red-border`);
+    }
+  }
+
   setSubmitHandler(handler) {
     this.getElement().querySelector(`form`)
       .addEventListener(`submit`, handler);
