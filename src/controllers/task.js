@@ -4,6 +4,8 @@ import TaskModel from "../models/task.js";
 import {render, replace, RenderPosition, remove} from "../utils/render.js";
 import {COLOR, DAYS} from "../const.js";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export const Mode = {
   ADDING: `adding`,
   DEFAULT: `default`,
@@ -35,7 +37,7 @@ const parseFormData = (formData) => {
 
   return new TaskModel({
     "description": formData.get(`text`),
-    "dueDate": date ? new Date(date) : null,
+    "due_date": date ? new Date(date) : null,
     "repeating_days": formData.getAll(`repeat`).reduce((acc, it) => {
       acc[it] = true;
       return acc;
@@ -87,13 +89,26 @@ export default class TaskController {
 
     this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
+      this._taskEditComponent.setRedBorder(false);
 
       const formData = this._taskEditComponent.getData();
       const data = parseFormData(formData);
 
+      this._taskEditComponent.setData({
+        saveButtonText: `Saving...`,
+      });
+
       this._onDataChange(this, task, data);
     });
-    this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, task, null));
+    this._taskEditComponent.setDeleteButtonClickHandler(() => {
+      this._taskEditComponent.setRedBorder(false);
+
+      this._taskEditComponent.setData({
+        deleteButtonText: `Deleting...`,
+      });
+
+      this._onDataChange(this, task, null);
+    });
 
     switch (mode) {
       case Mode.DEFAULT:
@@ -126,6 +141,23 @@ export default class TaskController {
     remove(this._taskEditComponent);
     remove(this._taskComponent);
     document.removeEventListener(`keydown`, this._onEscKeyKeydown);
+  }
+
+  shake() {
+    this._taskEditComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._taskComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._taskEditComponent.getElement().style.animation = ``;
+      this._taskComponent.getElement().style.animation = ``;
+
+      this._taskEditComponent.setData({
+        saveButtonText: `Save`,
+        deleteButtonText: `Delete`,
+      });
+
+      this._taskEditComponent.setRedBorder(true);
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _replaceTaskToEdit() {
